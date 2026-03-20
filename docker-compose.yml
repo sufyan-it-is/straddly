@@ -1,0 +1,148 @@
+# ── Straddly — Docker Compose ──────────────────────────────────────────
+# Usage:
+#   cp .env.example .env      # fill in your real values
+#   docker compose up -d
+#
+# Services:
+#   db       — PostgreSQL 16 (data persisted in Docker volume)
+#   backend  — FastAPI (DhanHQ data + paper trading APIs)
+#   frontend — React/Vite SPA served by Nginx
+#              Nginx also reverse-proxies /api → backend so both run on port 80
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+
+  # ── Mock Dhan Engine (local test market data) ───────────────────────────
+  mockdhan:
+    build:
+      context: ./mockdhan
+      dockerfile: Dockerfile
+    container_name: app_mockdhan
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:9000/health', timeout=3).read()"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    expose:
+      - "9000"
+    ports:
+      - "9000:9000"
+
+  # ── PostgreSQL ──────────────────────────────────────────────────────────
+  db:
+    image: postgres:16-alpine
+    container_name: app_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB:       trading_terminal
+      POSTGRES_USER:     postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      # Initial schema runs automatically on first container creation
+      - ./migrations/001_initial_schema.sql:/docker-entrypoint-initdb.d/001_initial_schema.sql:ro
+      - ./migrations/002_users_baskets.sql:/docker-entrypoint-initdb.d/002_users_baskets.sql:ro
+      - ./migrations/003_subscription_lists.sql:/docker-entrypoint-initdb.d/003_subscription_lists.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d trading_terminal"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    # Expose only on localhost for security; remove port mapping on production
+    # if you don't need direct DB access from the host machine.
+    ports:
+      - "127.0.0.1:5432:5432"
+
+  # ── FastAPI Backend ─────────────────────────────────────────────────────
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: app_backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+      mockdhan:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import httpx; httpx.get('http://localhost:8000/health', timeout=5).raise_for_status()"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    environment:
+      # Database — points to the 'db' service by container name
+      DATABASE_URL: postgresql://postgres:${DB_PASSWORD}@db:5432/trading_terminal
+
+      # DhanHQ Auth — TOTP auto-refresh (recommended)
+      DHAN_CLIENT_ID:   ${DHAN_CLIENT_ID}
+      DHAN_API_KEY:     ${DHAN_API_KEY:-}
+      DHAN_API_SECRET:  ${DHAN_API_SECRET:-}
+      DHAN_PIN:         ${DHAN_PIN}
+      DHAN_TOTP_SECRET: ${DHAN_TOTP_SECRET}
+
+      # DhanHQ Auth — Manual fallback (used if TOTP not set, or in manual mode)
+      DHAN_ACCESS_TOKEN: ${DHAN_ACCESS_TOKEN:-}
+
+      # Dhan REST/WS endpoints (point to local mock engine by default)
+      DHAN_BASE_URL:     ${DHAN_BASE_URL:-http://mockdhan:9000/v2}
+      DHAN_FEED_URL:     ${DHAN_FEED_URL:-ws://mockdhan:9000}
+      DHAN_DEPTH_20_URL: ${DHAN_DEPTH_20_URL:-ws://mockdhan:9000/twentydepth}
+
+      # CORS: allow frontend origin (same VPS, port 80)
+      CORS_ORIGINS_RAW: "http://localhost,http://${VPS_IP:-localhost},https://${DOMAIN:-localhost}"
+
+      # ── Startup safety flags ─────────────────────────────────────────────
+      # Prevent any outbound DhanHQ connections on local dev.
+      # Set all three to 'false'/'true' in .env to re-enable for production.
+      # NOTE: These are pinned to explicit values because host environment
+      # variables can otherwise override compose interpolation unexpectedly.
+      DISABLE_DHAN_WS:        ${DISABLE_DHAN_WS:-false}
+      DISABLE_MARKET_STREAMS: ${DISABLE_MARKET_STREAMS:-false}
+      STARTUP_START_STREAMS:  ${STARTUP_START_STREAMS:-true}
+      STARTUP_LOAD_MASTER:    ${STARTUP_LOAD_MASTER:-true}
+      STARTUP_LOAD_TIER_B:    ${STARTUP_LOAD_TIER_B:-true}
+
+      # Optional overrides (these have defaults in config.py)
+      GREEKS_POLL_SECONDS: ${GREEKS_POLL_SECONDS:-15}
+      INSTRUMENTS_CSV_PATH: /app/data/api-scrip-master-detailed.csv
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      FORCE_MARKET_OPEN: ${FORCE_MARKET_OPEN:-false}
+      FORCE_RUN_MARKET_WORKERS: ${FORCE_RUN_MARKET_WORKERS:-false}
+      EMAIL_OTP_SERVICE_BASE_URL: ${EMAIL_OTP_SERVICE_BASE_URL:-https://your-otp-service.example.com}
+      EMAIL_OTP_SERVICE_TIMEOUT_SECONDS: ${EMAIL_OTP_SERVICE_TIMEOUT_SECONDS:-15}
+      EMAIL_OTP_EXPIRY_SECONDS: ${EMAIL_OTP_EXPIRY_SECONDS:-300}
+    volumes:
+      # Mount the instrument CSV directory so it's available inside the container
+      - ./instrument_master:/app/data:ro
+    # Backend only exposed internally; Nginx proxies /api → port 8000
+    expose:
+      - "8000"
+    # Uncomment the line below if you want direct backend access (e.g. for debugging)
+    ports:
+       - "8000:8000"
+
+  # ── React Frontend (Nginx) ──────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: app_frontend
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "80:80"
+      # Uncomment for HTTPS (requires SSL cert volume, see nginx.conf)
+      # - "443:443"
+    # No extra env needed here — the Nginx config already wires /api → backend
+
+
+# ── Persistent volumes ──────────────────────────────────────────────────────
+volumes:
+  pg_data:
+    name: app_pg_data
+

@@ -1,0 +1,91 @@
+/* TradingView Custom Styling */
+
+/*
+  TradingView v26 applies theme classes inside the chart iframe.
+  These variables are the supported way to provide separate light and dark UI skins.
+*/
+
+:root:not(.theme-dark) {
+  --tv-color-platform-background: #f8fafc;
+  --tv-color-pane-background: #ffffff;
+  --tv-color-toolbar-button-background-hover: #e2e8f0;
+  --tv-color-toolbar-button-background-expanded: #dbeafe;
+  --tv-color-toolbar-button-background-active: #dbeafe;
+  --tv-color-toolbar-button-background-active-hover: #bfdbfe;
+  --tv-color-toolbar-button-text: #0f172a;
+  --tv-color-toolbar-button-text-hover: #0f172a;
+  --tv-color-toolbar-button-text-active: #2563eb;
+  --tv-color-toolbar-button-text-active-hover: #1d4ed8;
+  --tv-color-item-active-text: #ffffff;
+  --tv-color-toolbar-toggle-button-background-active: #2563eb;
+  --tv-color-toolbar-toggle-button-background-active-hover: #1d4ed8;
+  --tv-color-toolbar-divider-background: #e2e8f0;
+  --tv-color-toolbar-save-layout-loader: #64748b;
+  --tv-color-popup-background: #ffffff;
+  --tv-color-popup-element-text: #0f172a;
+  --tv-color-popup-element-text-hover: #0f172a;
+  --tv-color-popup-element-background-hover: #eff6ff;
+  --tv-color-popup-element-divider-background: #e2e8f0;
+  --tv-color-input-background: #ffffff;
+  --tv-color-input-text: #0f172a;
+  --tv-color-input-placeholder-text: #64748b;
+  --tv-color-dropdown-button-background: #ffffff;
+  --tv-color-dropdown-button-background-hover: #eff6ff;
+  --tv-color-dropdown-button-text: #0f172a;
+  --tv-color-dropdown-button-text-hover: #0f172a;
+}
+
+.theme-dark:root {
+  --tv-color-platform-background: #141414;
+  --tv-color-pane-background: #1d1d1f;
+  --tv-color-toolbar-button-background-hover: #2a2a2e;
+  --tv-color-toolbar-button-background-expanded: #3a2a17;
+  --tv-color-toolbar-button-background-active: #f59e0b;
+  --tv-color-toolbar-button-background-active-hover: #d97706;
+  --tv-color-toolbar-button-text: #e5e7eb;
+  --tv-color-toolbar-button-text-hover: #ffffff;
+  --tv-color-toolbar-button-text-active: #ffffff;
+  --tv-color-toolbar-button-text-active-hover: #ffffff;
+  --tv-color-item-active-text: #ffffff;
+  --tv-color-toolbar-toggle-button-background-active: #f59e0b;
+  --tv-color-toolbar-toggle-button-background-active-hover: #d97706;
+  --tv-color-toolbar-divider-background: #2a2a2e;
+  --tv-color-toolbar-save-layout-loader: #94a3b8;
+  --tv-color-popup-background: #1d1d1f;
+  --tv-color-popup-element-text: #e5e7eb;
+  --tv-color-popup-element-text-hover: #ffffff;
+  --tv-color-popup-element-background-hover: #2a2a2e;
+  --tv-color-popup-element-divider-background: #3b3b40;
+  --tv-color-input-background: #171717;
+  --tv-color-input-text: #e5e7eb;
+  --tv-color-input-placeholder-text: #94a3b8;
+  --tv-color-dropdown-button-background: #1d1d1f;
+  --tv-color-dropdown-button-background-hover: #2a2a2e;
+  --tv-color-dropdown-button-text: #e5e7eb;
+  --tv-color-dropdown-button-text-hover: #ffffff;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+.theme-dark body {
+  background: #141414;
+}
+
+:root:not(.theme-dark) body {
+  background: #f8fafc;
+}
+
+/* Hide TradingView bottom-left branding icon/link */
+.onchart-tv-logo,
+.onchart-tv-logo-link,
+[class*='tv-logo'],
+a[href*='tradingview.com'] {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}

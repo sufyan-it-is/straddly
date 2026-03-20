@@ -1,0 +1,41 @@
+{
+  "name": "trading-app-ui",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 5173",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "audit:contrast:light": "node scripts/audit-light-contrast.mjs --theme light",
+    "audit:contrast:all": "node scripts/audit-light-contrast.mjs --allThemes true"
+  },
+  "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
+    "axios": "^1.7.2",
+    "lightweight-charts": "^5.1.0",
+    "lucide-react": "^0.400.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.24.1",
+    "vanilla-tilt": "^1.8.1"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^8.2.0",
+    "@capacitor/cli": "^8.2.0",
+    "@capacitor/core": "^8.2.0",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.19",
+    "playwright": "^1.54.2",
+    "postcss": "^8.4.39",
+    "tailwindcss": "^3.4.4",
+    "tailwindcss-neumorphism-ui": "^1.0.4",
+    "typescript": "^5.4.5",
+    "vite": "^7.3.1"
+  }
+}
+

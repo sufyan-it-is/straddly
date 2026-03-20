@@ -1,0 +1,547 @@
+.nexus-glass-portal {
+    --bg-base: #1a1a1a;
+    --glass-bg: rgba(255, 255, 255, 0.07);
+    --glass-border: rgba(255, 255, 255, 0.25);
+    --glass-edge: rgba(255, 255, 255, 0.35);
+    --text-main: #ffffff;
+    --text-dim: #a1a1aa;
+    --accent: #adff2f;
+    --accent-glow: rgba(173, 255, 47, 0.4);
+
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: var(--text-main);
+    min-height: 100vh;
+}
+
+.nexus-glass-portal[data-theme="light"] {
+    --bg-base: #7e7e7e;
+    --glass-bg: rgba(255, 255, 255, 0.15);
+    --glass-border: #ffffff;
+    --glass-edge: #ffffff;
+    --text-main: #ffffff;
+    --text-dim: #e2e8f0;
+    --accent: #00f2ff;
+    --accent-glow: rgba(0, 242, 255, 0.5);
+}
+
+.nexus-glass-portal .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--glass-border);
+    border-top: 1px solid var(--glass-edge);
+    border-left: 1px solid var(--glass-edge);
+    border-radius: 24px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* Typography */
+.nexus-glass-portal h1 {
+    font-size: clamp(2.5rem, 8vw, 4rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 24px;
+}
+
+.nexus-glass-portal h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 20px;
+}
+
+.nexus-glass-portal p {
+    color: var(--text-dim);
+}
+
+/* Navigation */
+.nexus-glass-portal nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 30px 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Toggle Switch */
+.nexus-glass-portal .theme-toggle {
+    cursor: pointer;
+    width: 60px;
+    height: 30px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 30px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 5px;
+}
+
+.nexus-glass-portal .toggle-dot {
+    width: 20px;
+    height: 20px;
+    background: var(--accent);
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+    box-shadow: 0 0 10px var(--accent-glow);
+}
+
+.nexus-glass-portal[data-theme="light"] .toggle-dot {
+    transform: translateX(30px);
+}
+
+/* Buttons */
+.nexus-glass-portal .btn {
+    padding: 14px 34px;
+    border-radius: 50px;
+    font-weight: 800;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    box-shadow: 0 4px 12px var(--accent-glow);
+}
+
+.nexus-glass-portal .btn-glass {
+    padding: 14px 32px;
+    border-radius: 12px;
+    font-weight: 600;
+    background: transparent;
+    color: var(--text-main);
+    border: 1px solid var(--glass-border);
+    cursor: pointer;
+}
+
+/* UIverse Button by chase2k25 */
+.nexus-glass-portal .uiverse-button {
+    --white: #e6f3ff;
+    --blue-100: #b1d4fd;
+    --blue-200: #90c2ff;
+    --blue-300: #89b8f2;
+    --blue-400: #2668e2;
+    --blue-500: #2b4583;
+    --radius: 18px;
+    border-radius: var(--radius);
+    outline: none;
+    cursor: pointer;
+    font-size: 23px;
+    background: transparent;
+    letter-spacing: -1px;
+    border: 0;
+    position: relative;
+    width: 220px;
+    height: 80px;
+    margin: 0 auto;
+    display: block;
+}
+
+.nexus-glass-portal .uiverse-button .bg {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    filter: blur(1px);
+}
+
+.nexus-glass-portal .uiverse-button .bg::before,
+.nexus-glass-portal .uiverse-button .bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: calc(var(--radius) * 1.1);
+    background: var(--blue-500);
+}
+
+.nexus-glass-portal .uiverse-button .bg::before {
+    filter: blur(5px);
+    transition: all 0.3s ease;
+    box-shadow: -7px 6px 0 0 rgb(75 95 155 / 40%), -14px 12px 0 0 rgb(75 95 155 / 30%);
+}
+
+.nexus-glass-portal .uiverse-button .wrap {
+    border-radius: inherit;
+    overflow: hidden;
+    height: 100%;
+    transform: translate(6px, -6px);
+    padding: 3px;
+    background: linear-gradient(to bottom, var(--blue-100) 0%, var(--blue-400) 100%);
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.nexus-glass-portal .uiverse-button .btn-content {
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    position: relative;
+    height: 100%;
+    gap: 16px;
+    border-radius: calc(var(--radius) * 0.85);
+    font-weight: 600;
+    transition: all 0.3s ease;
+    background: linear-gradient(to bottom, var(--blue-300) 0%, var(--blue-400) 100%);
+    box-shadow: inset -2px 12px 11px -5px var(--blue-200), inset 1px -3px 11px 0px rgb(0 0 0 / 35%);
+}
+
+.nexus-glass-portal .uiverse-button .char {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nexus-glass-portal .uiverse-button .char span {
+    display: block;
+    color: transparent;
+    position: relative;
+}
+
+.nexus-glass-portal .uiverse-button .char span::after {
+    content: attr(data-label);
+    position: absolute;
+    color: var(--white);
+    text-shadow: -1px 1px 2px var(--blue-500);
+    left: 0;
+}
+
+.nexus-glass-portal .uiverse-button:hover .wrap {
+    transform: translate(8px, -8px);
+}
+
+/* --- UIverse Inputs --- */
+.nexus-glass-portal .form-group {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 25px;
+    perspective: 1000px;
+}
+
+.nexus-glass-portal .input-label {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+    color: var(--text-dim);
+    pointer-events: none;
+    transition: all 0.3s ease;
+    z-index: 2;
+}
+
+.nexus-glass-portal .search-input {
+    width: 100%;
+    height: 55px;
+    padding: 20px 15px 10px;
+    border: 2px solid var(--glass-border);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    font-size: 16px;
+    color: var(--text-main);
+    outline: none;
+    transition: all 0.3s ease;
+    transform-style: preserve-3d;
+}
+
+.nexus-glass-portal .search-input:focus {
+    border-color: var(--accent);
+    background: rgba(255, 255, 255, 0.08);
+    transform: rotateX(10deg);
+}
+
+.nexus-glass-portal .search-input:focus+.input-label,
+.nexus-glass-portal .search-input:not(:placeholder-shown)+.input-label {
+    transform: translateY(-160%) scale(0.8);
+    color: var(--accent);
+    font-weight: 600;
+}
+
+/* Success Modal */
+.nexus-glass-portal .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.nexus-glass-portal .modal-overlay.active {
+    display: flex;
+    opacity: 1;
+}
+
+.nexus-glass-portal .success-modal {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 30px;
+    padding: 50px 40px;
+    text-align: center;
+    max-width: 400px;
+    transform: scale(0.8);
+    transition: transform 0.4s ease;
+}
+
+.nexus-glass-portal .modal-overlay.active .success-modal {
+    transform: scale(1);
+}
+
+.nexus-glass-portal .timer-bar {
+    width: 0%;
+    height: 4px;
+    background: var(--accent);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+}
+
+.nexus-glass-portal .timer-bar.start {
+    width: 100%;
+    transition: width 3s linear;
+}
+
+/* Animations */
+.nexus-glass-portal .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+}
+
+.nexus-glass-portal .reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Keyframes */
+@keyframes nexus-spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes nexus-charAppear {
+    0% {
+        transform: translateY(50%);
+        opacity: 0;
+        filter: blur(20px);
+    }
+
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+        filter: blur(0);
+    }
+}
+/* ══════════════════════════════════════════════════════════════════════════
+   MOBILE RESPONSIVE STYLES
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Mobile First - Base styles for screens < 640px */
+@media (max-width: 639px) {
+  /* Typography - Increase readability on small screens */
+  body {
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+  }
+
+  h1 {
+    font-size: clamp(1.75rem, 8vw, 2.5rem) !important;
+  }
+
+  h2 {
+    font-size: clamp(1.5rem, 6vw, 2rem) !important;
+  }
+
+  h3 {
+    font-size: clamp(1.25rem, 5vw, 1.75rem) !important;
+  }
+
+  /* Glass Container - Stack vertically on mobile */
+  .glass-container {
+    padding: 1rem !important;
+    margin: 0.5rem !important;
+    border-radius: 12px !important;
+  }
+
+  /* Uiverse Button - Full width on mobile */
+  .uiverse-button {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 60px !important;
+    font-size: 14px !important;
+    padding: 0 1rem !important;
+  }
+
+  .uiverse-button .text {
+    font-size: 14px !important;
+  }
+
+  /* Grid Layouts - Single column on mobile */
+  .grid,
+  [class*='grid-cols'] {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  /* Cards - Full width with proper spacing */
+  .card,
+  .glass-card {
+    width: 100% !important;
+    margin: 0.75rem 0 !important;
+    padding: 1.25rem !important;
+  }
+
+  /* Forms - Touch-friendly inputs */
+  input,
+  textarea,
+  select,
+  .search-input {
+    width: 100% !important;
+    height: 48px !important;
+    font-size: 16px !important; /* Prevents zoom on iOS */
+    padding: 0.75rem !important;
+    border-radius: 8px !important;
+  }
+
+  textarea {
+    height: auto !important;
+    min-height: 120px !important;
+  }
+
+  /* Buttons - Minimum 44px touch target */
+  button,
+  .btn,
+  .glass-btn {
+    min-height: 44px !important;
+    padding: 0.75rem 1.25rem !important;
+    font-size: 15px !important;
+  }
+
+  /* Theme Toggle - Larger touch target */
+  .theme-toggle {
+    width: 70px !important;
+    height: 36px !important;
+  }
+
+  /* Hero Sections - Stack content */
+  .hero,
+  .hero-content {
+    flex-direction: column !important;
+    text-align: center !important;
+    padding: 2rem 1rem !important;
+  }
+
+  /* Feature Grid - Single column */
+  .features-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+  }
+
+  /* Reduce animations on mobile for performance */
+  .tilt-card,
+  [data-tilt] {
+    transform: none !important;
+  }
+
+  /* Spacing utilities */
+  .container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  /* Glass effects - Reduce blur for performance */
+  .glass-effect,
+  [class*='glass-'] {
+    backdrop-filter: blur(10px) !important;
+  }
+}
+
+/* Tablet - 640px to 1023px */
+@media (min-width: 640px) and (max-width: 1023px) {
+  /* Typography */
+  h1 {
+    font-size: clamp(2rem, 6vw, 3rem) !important;
+  }
+
+  h2 {
+    font-size: clamp(1.75rem, 5vw, 2.5rem) !important;
+  }
+
+  /* Containers */
+  .glass-container {
+    padding: 1.5rem !important;
+    margin: 1rem !important;
+  }
+
+  /* Buttons - Partial width */
+  .uiverse-button {
+    width: auto !important;
+    min-width: 200px !important;
+    max-width: 320px !important;
+  }
+
+  button,
+  .btn {
+    width: auto !important;
+    min-width: 150px !important;
+  }
+
+  /* Grid - 2 columns on tablet */
+  .grid-cols-3,
+  .grid-cols-4 {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Cards */
+  .card,
+  .glass-card {
+    padding: 1.5rem !important;
+  }
+}
+
+/* Desktop - 1024px and above */
+@media (min-width: 1024px) {
+  /* Hover effects enabled only on desktop */
+  .hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Enable tilt effects on desktop */
+  .tilt-card {
+    transform-style: preserve-3d;
+  }
+}
+
+/* Extra small devices (iPhone SE) */
+@media (max-width: 375px) {
+  body {
+    font-size: 13px !important;
+  }
+
+  h1 {
+    font-size: 1.75rem !important;
+  }
+
+  .glass-container {
+    padding: 0.75rem !important;
+  }
+
+  button,
+  .btn,
+  .uiverse-button {
+    font-size: 14px !important;
+    padding: 0.65rem 1rem !important;
+  }
+}
