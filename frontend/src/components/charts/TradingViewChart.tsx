@@ -149,6 +149,7 @@ export const TradingViewChart: React.FC<TradingViewChartProps> = ({
             'popup_hints',
             'adaptive_logo',
             'show_logo_on_all_charts',
+            'branding',
           ],
           custom_css_url: '/tradingview-custom.css',
           height: height,
